@@ -119,7 +119,8 @@ function due(d){return st(d.id).due<=Date.now()}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
 function mark(id,ok){const p=st(id);if(ok){p.box=Math.min(5,p.box+1);p.due=Date.now()+INTERVAL[p.box]*DAY}else{p.box=0;p.due=Date.now()}S.prog[id]=p;save()}
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function detail(d){return `<div class="head"><img src="img/${d.photo}" alt=""><div><div class="name">${esc(d.name)}</div><div class="kana">${esc(d.kana)}</div><div class="role"><span class="tag" data-c="${d.course}">${d.course==='校長'?'':d.course+'コース '}${esc(d.role)}</span>\n${esc(d.division)}</div></div></div>
+function portrait(d){return `img/hq/${d.photo}`}
+function detail(d){return `<div class="head"><img src="${portrait(d)}" alt=""><div><div class="name">${esc(d.name)}</div><div class="kana">${esc(d.kana)}</div><div class="role"><span class="tag" data-c="${d.course}">${d.course==='校長'?'':d.course+'コース '}${esc(d.role)}</span>\n${esc(d.division)}</div></div></div>
 <div class="body">${d.works?`<h4>代表作</h4><p>${esc(d.works)}</p>`:''}${d.work?`<img src="img/${d.work}" alt="">`:''}${d.intro?`<h4>プロフィール</h4><p>${esc(d.intro)}</p>`:''}${d.message?`<h4>メッセージ</h4><p>${esc(d.message)}</p>`:''}</div>`}
 
 // ---- header
@@ -143,7 +144,7 @@ function renderCard(){
   main.innerHTML=meta()+`<div class="done"><b>今日の分は完了</b><span>${isFinite(nxt)?'次の復習 '+new Date(nxt).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'})+'〜':'カードがありません'}</span><button id="again">全部もう一回</button></div>`;
   document.getElementById('again').onclick=()=>{S.all=true;buildQueue();render()};return}
  const d=S.cur;const face=S.dir==='face';
- const front=face?`<img class="photo" src="img/${d.photo}" alt=""><div class="hint"><b>この人は？</b><small>${d.course==='校長'?'':d.course+'コース'}　タップで答え</small></div>`
+ const front=face?`<img class="photo" src="${portrait(d)}" alt=""><div class="hint"><b>この人は？</b><small>${d.course==='校長'?'':d.course+'コース'}　タップで答え</small></div>`
   :`<div class="name-front"><span class="tag" data-c="${d.course}">${d.course}</span><div class="name">${esc(d.name)}</div><div class="kana">${esc(d.kana)}</div><small style="color:var(--sub);font-size:12px;margin-top:10px">タップで顔</small></div>`;
  main.innerHTML=meta()+`<div class="stage"><div class="card ${S.flip?'flip':''}" id="card"><div class="face front">${front}</div><div class="face back">${detail(d)}</div></div></div>
  <div class="acts ${S.flip?'':'hidden'}"><button class="ng" id="ng">✕ 覚えてない</button><button class="ok" id="ok">○ 覚えてた</button></div>
@@ -164,7 +165,7 @@ function renderQuiz(){
  if(!S.quiz){const order=shuffle(p.slice()).sort((a,b)=>st(a.id).box-st(b.id).box);const d=order[0];
   const others=shuffle((p.length>=4?p:DATA).filter(x=>x.id!==d.id)).slice(0,3);S.quiz={d,opts:shuffle([d,...others]),ans:null}}
  const {d,opts,ans}=S.quiz;
- main.innerHTML=meta(1)+`<div class="q"><img class="photo" src="img/${d.photo}" alt=""><div class="opts">${opts.map(o=>`<button class="opt ${ans?(o.id===d.id?'right':o.id===ans?'wrong':''):''}" data-id="${o.id}">${esc(o.name)}<small>${ans?esc(o.kana)+'　'+esc(o.division.split('\n').pop()):''}</small></button>`).join('')}</div>${ans?'<button class="next" id="next">次へ →</button>':''}</div>`;
+ main.innerHTML=meta(1)+`<div class="q"><img class="photo" src="${portrait(d)}" alt=""><div class="opts">${opts.map(o=>`<button class="opt ${ans?(o.id===d.id?'right':o.id===ans?'wrong':''):''}" data-id="${o.id}">${esc(o.name)}<small>${ans?esc(o.kana)+'　'+esc(o.division.split('\n').pop()):''}</small></button>`).join('')}</div>${ans?'<button class="next" id="next">次へ →</button>':''}</div>`;
  if(!ans)main.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S.quiz.ans=b.dataset.id;mark(d.id,b.dataset.id===d.id);renderQuiz()});
  else document.getElementById('next').onclick=()=>{S.quiz=null;renderQuiz()};
 }
@@ -172,7 +173,7 @@ function renderQuiz(){
 // ---- list mode
 function renderList(){
  const p=pool();
- main.innerHTML=`<div class="grid">${p.map(d=>`<button class="cell" data-id="${d.id}"><img src="img/${d.photo}" alt="" loading="lazy"><div class="n"><i class="lv" data-l="${st(d.id).box}"></i>${esc(d.name)}</div><div class="r">${esc(d.role)}${d.course==='校長'?'':'・'+d.course}</div></button>`).join('')}</div>
+ main.innerHTML=`<div class="grid">${p.map(d=>`<button class="cell" data-id="${d.id}"><img src="${portrait(d)}" alt="" loading="lazy"><div class="n"><i class="lv" data-l="${st(d.id).box}"></i>${esc(d.name)}</div><div class="r">${esc(d.role)}${d.course==='校長'?'':'・'+d.course}</div></button>`).join('')}</div>
  <div class="foot"><span>● 定着度（黄→緑）</span><button id="reset">進捗をリセット</button></div>`;
  main.querySelectorAll('.cell').forEach(b=>b.onclick=()=>{const d=DATA.find(x=>x.id===b.dataset.id);document.getElementById('sheetIn').innerHTML=detail(d);document.getElementById('sheet').classList.add('on')});
  document.getElementById('reset').onclick=()=>{if(confirm('進捗を全部消しますか？')){S.prog={};save();renderList()}};
