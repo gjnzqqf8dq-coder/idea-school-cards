@@ -157,7 +157,7 @@ main.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px
 <div class="bar" id="bar"></div>
 <div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
 
-<script src="data.js"></script>
+<script src="data.js?v=20260911b"></script>
 <script>
 const GROUPS={teacher:['全部','未来','表現','熱狂','校長'],peer:['全部','学生','事務局']};
 const INTERVAL=[0,1,3,7,14,30], DAY=864e5;
@@ -196,7 +196,6 @@ function detail(d){
 // ---------- header wiring ----------
 const elDeck=document.getElementById('deck'), elChips=document.getElementById('chips');
 const elMain=document.getElementById('main'), elBar=document.getElementById('bar');
-if(!HAS_PEER)elDeck.style.display='none';
 function drawChips(){
  elChips.innerHTML=GROUPS[S.deck].map(c=>`<button class="chip ${c===S.course?'on':''}" data-c="${c}">${label(c)}</button>`).join('');
 }
