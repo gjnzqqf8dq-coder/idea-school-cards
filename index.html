@@ -4,98 +4,146 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#ffffff">
-<title>講師カード｜アイデアの学校2026</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>顔カード｜アイデアの学校2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--ink:#111;--sub:#777;--line:#e6e6e6;--card:#f6f6f4;
---c-未来:#0a6cff;--c-表現:#e5322d;--c-熱狂:#ff8a00;--c-校長:#222;
---ok:#1a9c5b;--ng:#d62b2b;--safe-b:env(safe-area-inset-bottom)}
+:root{
+ --bg:#fff;--ink:#111;--sub:#767676;--line:#e8e8e6;--card:#f5f5f3;
+ --c-未来:#0a6cff;--c-表現:#e5322d;--c-熱狂:#ff8a00;--c-校長:#222;--c-学生:#0a8f6a;--c-事務局:#7a5cf0;
+ --ok:#12945a;--ng:#d62b2b;
+ --sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px);
+ --barh:80px;
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;-webkit-font-smoothing:antialiased}
-body{min-height:100dvh;display:flex;flex-direction:column;overscroll-behavior:none}
+html{height:100%}
+body{margin:0;height:100dvh;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none;
+ background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
-header{padding:14px 16px 0;display:flex;flex-direction:column;gap:10px}
-.title{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--sub)}
-.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+img{display:block}
+
+/* ---------- header ---------- */
+header{flex:none;padding:calc(8px + var(--st)) 14px 0}
+.hrow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.title{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--sub);flex:1;min-width:0;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg{flex:none;display:flex;background:var(--card);border-radius:999px;padding:3px}
+.seg button{padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;color:var(--sub);transition:.15s}
+.seg button.on{background:var(--ink);color:#fff}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;padding:7px 13px;border-radius:999px;border:1.5px solid var(--line);font-size:14px;font-weight:500;color:var(--sub);white-space:nowrap}
+.chip{flex:0 0 auto;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);
+ font-size:14px;font-weight:500;color:var(--sub);white-space:nowrap}
 .chip.on{color:#fff;border-color:transparent;background:var(--ink)}
 .chip.on[data-c="未来"]{background:var(--c-未来)}.chip.on[data-c="表現"]{background:var(--c-表現)}
 .chip.on[data-c="熱狂"]{background:var(--c-熱狂)}.chip.on[data-c="校長"]{background:var(--c-校長)}
-.tabs{display:flex;border-bottom:1px solid var(--line)}
-.tab{flex:1;padding:10px 0 9px;font-size:14px;font-weight:700;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px}
+.chip.on[data-c="学生"]{background:var(--c-学生)}.chip.on[data-c="事務局"]{background:var(--c-事務局)}
+.tabs{flex:none;display:flex;border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:11px 0 10px;font-size:14px;font-weight:700;color:var(--sub);
+ border-bottom:2.5px solid transparent;margin-bottom:-1px}
 .tab.on{color:var(--ink);border-color:var(--ink)}
-main{flex:1;display:flex;flex-direction:column;padding:12px 16px calc(16px + var(--safe-b));max-width:520px;width:100%;margin:0 auto}
-.meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--sub);margin-bottom:10px}
-.bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:12px}
-.bar i{display:block;height:100%;background:var(--ink);width:0;transition:width .3s}
-/* card */
-.stage{flex:1;position:relative;perspective:1200px;min-height:380px}
-.card{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1);will-change:transform}
-.card.flip{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
-.face.back{transform:rotateY(180deg)}
-.face .photo{width:100%;aspect-ratio:1;object-fit:cover;background:#ddd;display:block}
-.front .photo{flex:1;aspect-ratio:auto;min-height:0;height:100%}
-.front .hint{padding:16px 18px 18px;display:flex;align-items:center;justify-content:space-between}
+
+/* ---------- main ---------- */
+main{flex:1;min-height:0;display:flex;flex-direction:column;width:100%;max-width:560px;margin:0 auto;
+ padding:8px 14px 0;overflow:hidden}
+main.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px}
+.meta{flex:none;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--sub)}
+.bar2{flex:none;height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:6px 0 9px}
+.bar2 i{display:block;height:100%;background:var(--ink);width:0;transition:width .3s}
+
+/* ---------- flip card ---------- */
+.stage{flex:1;min-height:0;position:relative;perspective:1300px}
+.flipper{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.flipper.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+ background:var(--card);border-radius:24px;overflow:hidden;display:flex;flex-direction:column}
+.face.back{transform:rotateY(180deg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.front .photo{flex:none;width:100%;aspect-ratio:1;object-fit:cover;background:#ddd;margin-top:auto}
+.front .hint{flex:none;margin-top:auto;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .front .hint b{font-size:15px}
 .front .hint small{font-size:12px;color:var(--sub)}
-.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;padding:3px 8px;border-radius:6px;margin-right:6px}
-.tag[data-c="未来"]{background:var(--c-未来)}.tag[data-c="表現"]{background:var(--c-表現)}.tag[data-c="熱狂"]{background:var(--c-熱狂)}.tag[data-c="校長"]{background:var(--c-校長)}
-.back{overflow-y:auto}
-.back .head{display:flex;gap:14px;padding:16px 18px 10px;align-items:center}
-.back .head img{width:76px;height:76px;border-radius:14px;object-fit:cover;flex:none}
-.back .name{font-size:24px;font-weight:700;line-height:1.15;letter-spacing:.02em}
-.back .kana{font-size:12px;color:var(--sub);margin-top:2px}
-.back .role{font-size:12px;color:var(--sub);margin-top:6px;white-space:pre-line;line-height:1.4}
-.back .body{padding:0 18px 18px;font-size:13px;line-height:1.7}
-.back .body h4{margin:12px 0 4px;font-size:11px;color:var(--sub);letter-spacing:.08em;font-weight:700}
-.back .body p{margin:0;white-space:pre-line}
-.back .body img{width:100%;border-radius:12px;margin-top:8px;display:block}
-.name-front{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px}
-.name-front .name{font-size:34px;font-weight:700}
-.name-front .kana{color:var(--sub);font-size:14px}
-.acts{display:flex;gap:10px;margin-top:14px}
-.acts button{flex:1;padding:16px 0;border-radius:16px;font-size:16px;font-weight:700;color:#fff;transition:transform .08s}
-.acts button:active{transform:scale(.96)}
-.acts .ng{background:var(--ng)}.acts .ok{background:var(--ok)}
-.acts.hidden{visibility:hidden}
+.name-front{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center}
+.name-front .nm{font-size:min(11vw,38px);font-weight:700;line-height:1.15}
+.name-front .kn{color:var(--sub);font-size:13px}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;padding:3px 9px;border-radius:6px}
+.tag[data-c="未来"]{background:var(--c-未来)}.tag[data-c="表現"]{background:var(--c-表現)}
+.tag[data-c="熱狂"]{background:var(--c-熱狂)}.tag[data-c="校長"]{background:var(--c-校長)}
+.tag[data-c="学生"]{background:var(--c-学生)}.tag[data-c="事務局"]{background:var(--c-事務局)}
+.dt .head{display:flex;gap:14px;padding:18px 18px 10px;align-items:center}
+.dt .head img{width:82px;height:82px;border-radius:16px;object-fit:cover;flex:none;background:#ddd}
+.dt .nm{font-size:24px;font-weight:700;line-height:1.15;letter-spacing:.02em}
+.dt .kn{font-size:12px;color:var(--sub);margin-top:3px}
+.dt .rl{font-size:12px;color:var(--sub);margin-top:7px;white-space:pre-line;line-height:1.45}
+.dt .body{padding:0 18px 20px;font-size:13px;line-height:1.7}
+.dt .body h4{margin:14px 0 4px;font-size:11px;color:var(--sub);letter-spacing:.08em;font-weight:700}
+.dt .body p{margin:0;white-space:pre-line}
+.dt .body img{width:100%;border-radius:12px;margin-top:8px}
+
+/* ---------- quiz ---------- */
+.q{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.q .photo{flex:1;min-height:110px;aspect-ratio:1;width:auto;max-width:100%;margin:0 auto;
+ object-fit:cover;border-radius:22px;background:#ddd}
+.opts{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{min-width:0;min-height:64px;padding:8px 10px;border-radius:15px;background:var(--card);
+ font-size:16px;font-weight:700;text-align:center;border:2.5px solid transparent;transition:.12s;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.25}
+.opt:active{transform:scale(.985)}
+.opt small{display:block;width:100%;min-width:0;font-size:10.5px;color:var(--sub);font-weight:400;margin-top:2px;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opt.right{border-color:var(--ok);background:#e8f7ef}
+.opt.wrong{border-color:var(--ng);background:#fdecec}
+.opt.dim{opacity:.45}
+
+/* ---------- fixed bottom bar ---------- */
+.bar{flex:none;width:100%;max-width:560px;margin:0 auto;padding:9px 14px calc(9px + var(--sb));
+ min-height:var(--barh);display:flex;align-items:center;gap:10px;background:var(--bg);
+ border-top:1px solid transparent}
+.bar.sep{border-top-color:var(--line)}
+.bar button{flex:1;min-height:60px;border-radius:17px;font-size:17px;font-weight:700;color:#fff;
+ transition:transform .08s;display:flex;align-items:center;justify-content:center;gap:6px}
+.bar button:active{transform:scale(.97)}
+.bar .ng{background:var(--ng)}
+.bar .ok{background:var(--ok)}
+.bar .go{background:var(--ink)}
+.bar .ghost{background:var(--card);color:var(--ink)}
+.bar .note{flex:1;text-align:center;font-size:13px;color:var(--sub);line-height:1.4}
+.bar.hide{display:none}
+
+/* ---------- list ---------- */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:480px){.grid{grid-template-columns:repeat(4,1fr)}}
+.cell{text-align:left}
+.cell img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:15px;background:#ddd}
+.cell .n{font-size:13px;font-weight:700;margin-top:6px;display:flex;align-items:center;gap:5px;line-height:1.25}
+.lv{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--line);flex:none}
+.lv[data-l="1"],.lv[data-l="2"]{background:#f5c400}
+.lv[data-l="3"],.lv[data-l="4"]{background:#8ecf3f}
+.lv[data-l="5"]{background:var(--ok)}
+.cell .r{font-size:11px;color:var(--sub);line-height:1.3}
+.foot{margin-top:22px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--sub)}
+.foot button{color:var(--sub);text-decoration:underline;padding:8px 0}
 .done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:var(--sub);font-size:14px}
 .done b{font-size:22px;color:var(--ink)}
-.done button{padding:12px 22px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700}
-/* quiz */
-.q .photo{width:100%;aspect-ratio:1;max-height:46vh;object-fit:cover;border-radius:22px;background:#ddd;display:block}
-.opts{display:grid;gap:8px;margin-top:14px}
-.opt{padding:15px 16px;border-radius:14px;background:var(--card);font-size:17px;font-weight:700;text-align:left;border:2px solid transparent}
-.opt small{display:block;font-size:11px;color:var(--sub);font-weight:400}
-.opt.right{border-color:var(--ok);background:#e9f7ef}.opt.wrong{border-color:var(--ng);background:#fdecec}
-.next{margin-top:12px;padding:14px;border-radius:14px;background:var(--ink);color:#fff;font-weight:700;font-size:15px;width:100%}
-/* list */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.cell{text-align:left}
-.cell img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;display:block;background:#ddd}
-.cell .n{font-size:13px;font-weight:700;margin-top:6px;display:flex;align-items:center;gap:5px}
-.lv{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--line);flex:none}
-.lv[data-l="1"],.lv[data-l="2"]{background:#f5c400}.lv[data-l="3"],.lv[data-l="4"]{background:#8ecf3f}.lv[data-l="5"]{background:var(--ok)}
-.cell .r{font-size:11px;color:var(--sub)}
-.foot{margin-top:22px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--sub)}
-.foot button{color:var(--sub);text-decoration:underline}
-.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:10}
+
+/* ---------- detail sheet ---------- */
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:20}
 .sheet.on{display:flex}
-.sheet .in{background:var(--bg);width:100%;max-width:520px;margin:0 auto;border-radius:22px 22px 0 0;max-height:88dvh;overflow-y:auto;padding-bottom:var(--safe-b)}
-.sheet .in .head{display:flex;gap:14px;padding:18px 18px 10px;align-items:center}
-.sheet .in .head img{width:76px;height:76px;border-radius:14px;object-fit:cover}
-.sheet .name{font-size:22px;font-weight:700}.sheet .kana,.sheet .role{font-size:12px;color:var(--sub);white-space:pre-line}
-.sheet .body{padding:0 18px 22px;font-size:13px;line-height:1.7}
-.sheet .body h4{margin:12px 0 4px;font-size:11px;color:var(--sub);letter-spacing:.08em}
-.sheet .body p{margin:0;white-space:pre-line}.sheet .body img{width:100%;border-radius:12px;margin-top:8px}
-.dir{font-size:12px;color:var(--sub);padding:4px 8px;border-radius:8px;border:1px solid var(--line)}
+.sheet .in{background:var(--bg);width:100%;max-width:560px;margin:0 auto;border-radius:24px 24px 0 0;
+ max-height:88dvh;overflow-y:auto;padding-bottom:calc(20px + var(--sb))}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:10px auto 0}
 </style>
 </head>
 <body>
 <header>
-  <div class="title">アイデアの学校 2026 ｜ 講師カード</div>
+  <div class="hrow">
+    <div class="title" id="hTitle">アイデアの学校 2026</div>
+    <div class="seg" id="deck">
+      <button data-d="teacher" class="on">講師</button>
+      <button data-d="peer">同期</button>
+    </div>
+  </div>
   <div class="chips" id="chips"></div>
 </header>
 <div class="tabs" id="tabs">
@@ -104,80 +152,173 @@ main{flex:1;display:flex;flex-direction:column;padding:12px 16px calc(16px + var
   <button class="tab" data-m="list">一覧</button>
 </div>
 <main id="main"></main>
-<div class="sheet" id="sheet" onclick="if(event.target===this)this.classList.remove('on')"><div class="in" id="sheetIn"></div></div>
+<div class="bar" id="bar"></div>
+<div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
+
 <script src="data.js"></script>
 <script>
-const COURSES=['未来','表現','熱狂','校長','全部'];
-const INTERVAL=[0,1,3,7,14,30]; // days per box
-const DAY=864e5;
-const S={course:ls('course')||'未来',mode:'card',dir:ls('dir')||'face',prog:JSON.parse(ls('prog')||'{}'),queue:null,cur:null,flip:false,all:false,quiz:null};
+const GROUPS={teacher:['全部','未来','表現','熱狂','校長'],peer:['全部','学生','事務局']};
+const INTERVAL=[0,1,3,7,14,30], DAY=864e5;
+const HAS_PEER=DATA.some(d=>d.deck==='peer');
+
 function ls(k,v){try{return v===undefined?localStorage.getItem('isc_'+k):localStorage.setItem('isc_'+k,v)}catch(e){return null}}
-function save(){ls('prog',JSON.stringify(S.prog));ls('course',S.course);ls('dir',S.dir)}
-function pool(){return DATA.filter(d=>S.course==='全部'||d.course===S.course)}
+const S={
+  deck:(HAS_PEER&&ls('deck'))||'teacher',
+  course:ls('course')||'全部',
+  mode:'card', dir:ls('dir')||'face',
+  prog:JSON.parse(ls('prog')||'{}'),
+  queue:null, cur:null, flip:false, all:false, quiz:null
+};
+if(!HAS_PEER)S.deck='teacher';
+if(!GROUPS[S.deck].includes(S.course))S.course='全部';
+
+function save(){ls('prog',JSON.stringify(S.prog));ls('course',S.course);ls('dir',S.dir);ls('deck',S.deck)}
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function pool(){return DATA.filter(d=>d.deck===S.deck&&(S.course==='全部'||d.course===S.course))}
 function st(id){return S.prog[id]||{box:0,due:0}}
 function due(d){return st(d.id).due<=Date.now()}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
-function mark(id,ok){const p=st(id);if(ok){p.box=Math.min(5,p.box+1);p.due=Date.now()+INTERVAL[p.box]*DAY}else{p.box=0;p.due=Date.now()}S.prog[id]=p;save()}
-function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function portrait(d){return `img/hq/${d.photo}`}
-function detail(d){return `<div class="head"><img src="${portrait(d)}" alt=""><div><div class="name">${esc(d.name)}</div><div class="kana">${esc(d.kana)}</div><div class="role"><span class="tag" data-c="${d.course}">${d.course==='校長'?'':d.course+'コース '}${esc(d.role)}</span>\n${esc(d.division)}</div></div></div>
-<div class="body">${d.works?`<h4>代表作</h4><p>${esc(d.works)}</p>`:''}${d.work?`<img src="img/${d.work}" alt="">`:''}${d.intro?`<h4>プロフィール</h4><p>${esc(d.intro)}</p>`:''}${d.message?`<h4>メッセージ</h4><p>${esc(d.message)}</p>`:''}</div>`}
+function mark(id,ok){const p=st(id);if(ok){p.box=Math.min(5,p.box+1);p.due=Date.now()+INTERVAL[p.box]*DAY}
+ else{p.box=0;p.due=Date.now()}S.prog[id]=p;save()}
+function portrait(d){return 'img/hq/'+d.photo}
+function sub(d){return d.deck==='teacher'?(d.division||'').split('\n').pop():''}
+function label(c){return c==='全部'?'全部':(c==='校長'||c==='学生'||c==='事務局')?c:c+'コース'}
 
-// ---- header
-const chips=document.getElementById('chips');
-chips.innerHTML=COURSES.map(c=>`<button class="chip ${c===S.course?'on':''}" data-c="${c}">${c==='校長'?'校長':c==='全部'?'全部':c+'コース'}</button>`).join('');
-chips.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;S.course=b.dataset.c;save();[...chips.children].forEach(x=>x.classList.toggle('on',x===b));S.queue=null;S.cur=null;S.all=false;S.quiz=null;render()};
-document.getElementById('tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;S.mode=b.dataset.m;[...b.parentNode.children].forEach(x=>x.classList.toggle('on',x===b));S.quiz=null;render()};
+function detail(d){
+ return `<div class="dt"><div class="head"><img src="${portrait(d)}" alt=""><div>
+ <div class="nm">${esc(d.name)}</div><div class="kn">${esc(d.kana)}</div>
+ <div class="rl"><span class="tag" data-c="${d.course}">${label(d.course)}${d.deck==='teacher'?' '+esc(d.role):''}</span>\n${esc(d.division)}</div></div></div>
+ <div class="body">${d.works?`<h4>代表作</h4><p>${esc(d.works)}</p>`:''}${d.work?`<img src="img/${d.work}" alt="">`:''}${d.intro?`<h4>${d.deck==='teacher'?'プロフィール':'メモ'}</h4><p>${esc(d.intro)}</p>`:''}${d.message?`<h4>メッセージ</h4><p>${esc(d.message)}</p>`:''}</div></div>`;
+}
 
-const main=document.getElementById('main');
-function render(){({card:renderCard,quiz:renderQuiz,list:renderList})[S.mode]()}
+// ---------- header wiring ----------
+const elDeck=document.getElementById('deck'), elChips=document.getElementById('chips');
+const elMain=document.getElementById('main'), elBar=document.getElementById('bar');
+if(!HAS_PEER)elDeck.style.display='none';
+function drawChips(){
+ elChips.innerHTML=GROUPS[S.deck].map(c=>`<button class="chip ${c===S.course?'on':''}" data-c="${c}">${label(c)}</button>`).join('');
+}
+elDeck.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+ S.deck=b.dataset.d;S.course='全部';
+ [...elDeck.children].forEach(x=>x.classList.toggle('on',x===b));
+ drawChips();reset();save();render()};
+elChips.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;
+ S.course=b.dataset.c;save();
+ [...elChips.children].forEach(x=>x.classList.toggle('on',x===b));
+ reset();render()};
+document.getElementById('tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;
+ S.mode=b.dataset.m;[...b.parentNode.children].forEach(x=>x.classList.toggle('on',x===b));
+ S.quiz=null;render()};
+function reset(){S.queue=null;S.cur=null;S.all=false;S.quiz=null;S.flip=false}
+[...elDeck.children].forEach(x=>x.classList.toggle('on',x.dataset.d===S.deck));
+drawChips();
 
-// ---- card mode
+// ---------- render ----------
+function render(){
+ elMain.className=S.mode==='list'?'scroll':'';
+ ({card:renderCard,quiz:renderQuiz,list:renderList})[S.mode]();
+}
+function head(showLeft){
+ const p=pool(), learned=p.filter(d=>st(d.id).box>=3).length;
+ const left=showLeft?'残り '+((S.queue||[]).length+(S.cur?1:0)):'';
+ return `<div class="meta"><span>${left}</span><span>定着 ${learned} / ${p.length}</span></div>
+ <div class="bar2"><i style="width:${p.length?learned/p.length*100:0}%"></i></div>`;
+}
+function setBar(html,sep){elBar.className='bar'+(sep?' sep':'');elBar.innerHTML=html}
+
+// ---------- card ----------
 function buildQueue(){const p=pool();S.queue=shuffle(S.all?p.slice():p.filter(due));S.cur=null}
-function nextCard(){if(!S.queue.length){S.cur=null;return}S.cur=S.queue.shift();S.flip=false}
-function meta(q){const p=pool();const learned=p.filter(d=>st(d.id).box>=3).length;const left=q?'':'残り '+((S.queue||[]).length+(S.cur?1:0));
- return `<div class="meta"><span>${left}</span><span>定着 ${learned} / ${p.length}</span></div><div class="bar"><i style="width:${p.length?learned/p.length*100:0}%"></i></div>`}
 function renderCard(){
  if(!S.queue)buildQueue();
- if(!S.cur)nextCard();
- if(!S.cur){const p=pool();const nxt=Math.min(...p.map(d=>st(d.id).due).filter(t=>t>Date.now()));
-  main.innerHTML=meta()+`<div class="done"><b>今日の分は完了</b><span>${isFinite(nxt)?'次の復習 '+new Date(nxt).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'})+'〜':'カードがありません'}</span><button id="again">全部もう一回</button></div>`;
-  document.getElementById('again').onclick=()=>{S.all=true;buildQueue();render()};return}
- const d=S.cur;const face=S.dir==='face';
- const front=face?`<img class="photo" src="${portrait(d)}" alt=""><div class="hint"><b>この人は？</b><small>${d.course==='校長'?'':d.course+'コース'}　タップで答え</small></div>`
-  :`<div class="name-front"><span class="tag" data-c="${d.course}">${d.course}</span><div class="name">${esc(d.name)}</div><div class="kana">${esc(d.kana)}</div><small style="color:var(--sub);font-size:12px;margin-top:10px">タップで顔</small></div>`;
- main.innerHTML=meta()+`<div class="stage"><div class="card ${S.flip?'flip':''}" id="card"><div class="face front">${front}</div><div class="face back">${detail(d)}</div></div></div>
- <div class="acts ${S.flip?'':'hidden'}"><button class="ng" id="ng">✕ 覚えてない</button><button class="ok" id="ok">○ 覚えてた</button></div>
- <div class="meta" style="margin-top:10px;justify-content:flex-end"><button class="dir" id="dir">${face?'顔 → 名前':'名前 → 顔'}　↔</button></div>`;
- const card=document.getElementById('card');
- card.onclick=()=>{S.flip=!S.flip;card.classList.toggle('flip',S.flip);document.querySelector('.acts').classList.toggle('hidden',!S.flip)};
- document.getElementById('ng').onclick=e=>{e.stopPropagation();mark(d.id,false);S.queue.splice(Math.min(2,S.queue.length),0,d);S.cur=null;render()};
- document.getElementById('ok').onclick=e=>{e.stopPropagation();mark(d.id,true);S.cur=null;render()};
- document.getElementById('dir').onclick=()=>{S.dir=face?'name':'face';save();S.flip=false;render()};
- // swipe
- let x0=null;card.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
- card.addEventListener('touchend',e=>{if(x0===null||!S.flip)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(dx>70)document.getElementById('ok').click();else if(dx<-70)document.getElementById('ng').click()});
+ if(!S.cur){S.cur=S.queue.shift()||null;S.flip=false}
+ const p=pool();
+ if(!S.cur){
+  const nxt=Math.min(...p.map(d=>st(d.id).due).filter(t=>t>Date.now()));
+  elMain.innerHTML=head(false)+`<div class="done"><b>${p.length?'今日の分は完了':'カードがありません'}</b>
+  <span>${isFinite(nxt)?'次の復習 '+new Date(nxt).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'})+'〜':''}</span></div>`;
+  setBar(p.length?`<button class="go" id="again">全部もう一回</button>`:`<div class="note">左上で講師／同期を切り替え</div>`,true);
+  const a=document.getElementById('again');if(a)a.onclick=()=>{S.all=true;buildQueue();render()};
+  return;
+ }
+ const d=S.cur, face=S.dir==='face';
+ const front=face
+  ? `<img class="photo" src="${portrait(d)}" alt=""><div class="hint"><b>この人は？</b><small>${label(d.course)}</small></div>`
+  : `<div class="name-front"><span class="tag" data-c="${d.course}">${label(d.course)}</span>
+     <div class="nm">${esc(d.name)}</div><div class="kn">${esc(d.kana)}</div></div>`;
+ elMain.innerHTML=head(true)+
+  `<div class="stage"><div class="flipper ${S.flip?'flip':''}" id="flip">
+    <div class="face front">${front}</div><div class="face back">${detail(d)}</div></div></div>`;
+ const fl=document.getElementById('flip');
+ const doFlip=()=>{S.flip=!S.flip;fl.classList.toggle('flip',S.flip);drawCardBar()};
+ fl.onclick=doFlip;
+ function drawCardBar(){
+  if(!S.flip){
+   setBar(`<button class="go" id="show">答えを見る</button>
+    <button class="ghost" id="dir" style="flex:0 0 96px;font-size:13px">${face?'顔→名前':'名前→顔'}</button>`,true);
+   document.getElementById('show').onclick=doFlip;
+   document.getElementById('dir').onclick=()=>{S.dir=face?'name':'face';save();S.flip=false;render()};
+  }else{
+   setBar(`<button class="ng" id="ng">✕ まだ</button><button class="ok" id="ok">○ 覚えた</button>`,true);
+   document.getElementById('ng').onclick=()=>{mark(d.id,false);S.queue.splice(Math.min(2,S.queue.length),0,d);S.cur=null;render()};
+   document.getElementById('ok').onclick=()=>{mark(d.id,true);S.cur=null;render()};
+  }
+ }
+ drawCardBar();
+ let x0=null;
+ fl.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+ fl.addEventListener('touchend',e=>{if(x0===null||!S.flip)return;const dx=e.changedTouches[0].clientX-x0;x0=null;
+  if(dx>70)document.getElementById('ok')?.click();else if(dx<-70)document.getElementById('ng')?.click()});
 }
 
-// ---- quiz mode
+// ---------- quiz ----------
+function newQuiz(){
+ const p=pool();
+ const order=shuffle(p.slice()).sort((a,b)=>st(a.id).box-st(b.id).box);
+ const d=order[0];
+ let bank=p.filter(x=>x.id!==d.id);
+ if(bank.length<3)bank=DATA.filter(x=>x.deck===d.deck&&x.id!==d.id);
+ S.quiz={d,opts:shuffle([d,...shuffle(bank).slice(0,3)]),ans:null};
+}
 function renderQuiz(){
- const p=pool();if(p.length<2){main.innerHTML='<div class="done">人数が足りません</div>';return}
- if(!S.quiz){const order=shuffle(p.slice()).sort((a,b)=>st(a.id).box-st(b.id).box);const d=order[0];
-  const others=shuffle((p.length>=4?p:DATA).filter(x=>x.id!==d.id)).slice(0,3);S.quiz={d,opts:shuffle([d,...others]),ans:null}}
- const {d,opts,ans}=S.quiz;
- main.innerHTML=meta(1)+`<div class="q"><img class="photo" src="${portrait(d)}" alt=""><div class="opts">${opts.map(o=>`<button class="opt ${ans?(o.id===d.id?'right':o.id===ans?'wrong':''):''}" data-id="${o.id}">${esc(o.name)}<small>${ans?esc(o.kana)+'　'+esc(o.division.split('\n').pop()):''}</small></button>`).join('')}</div>${ans?'<button class="next" id="next">次へ →</button>':''}</div>`;
- if(!ans)main.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S.quiz.ans=b.dataset.id;mark(d.id,b.dataset.id===d.id);renderQuiz()});
- else document.getElementById('next').onclick=()=>{S.quiz=null;renderQuiz()};
+ const p=pool();
+ if(p.length<2){elMain.innerHTML=`<div class="done"><b>人数が足りません</b></div>`;setBar('',false);return}
+ if(!S.quiz)newQuiz();
+ const {d,opts,ans}=S.quiz, done=!!ans;
+ elMain.innerHTML=head(false)+`<div class="q"><img class="photo" src="${portrait(d)}" alt="">
+  <div class="opts">${opts.map(o=>{
+    const cls=done?(o.id===d.id?'right':o.id===ans?'wrong':'dim'):'';
+    const s=done?`${esc(o.kana)}${sub(o)?'　'+esc(sub(o)):''}`:'&nbsp;';
+    return `<button class="opt ${cls}" data-id="${o.id}">${esc(o.name)}<small ${done?'':'style="visibility:hidden"'}>${s}</small></button>`;
+  }).join('')}</div></div>`;
+ if(!done){
+  elMain.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+   S.quiz.ans=b.dataset.id;mark(d.id,b.dataset.id===d.id);renderQuiz()});
+  setBar(`<div class="note">4つから選ぶ</div>`,true);
+ }else{
+  const ok=ans===d.id;
+  const go=()=>{S.quiz=null;renderQuiz()};
+  setBar(`<button class="go" id="next">${ok?'正解':'不正解'}　次へ →</button>`,true);
+  document.getElementById('next').onclick=go;
+  elMain.querySelector('.q').onclick=go;   // 写真・選択肢どこを押しても次へ
+ }
 }
 
-// ---- list mode
+// ---------- list ----------
 function renderList(){
  const p=pool();
- main.innerHTML=`<div class="grid">${p.map(d=>`<button class="cell" data-id="${d.id}"><img src="${portrait(d)}" alt="" loading="lazy"><div class="n"><i class="lv" data-l="${st(d.id).box}"></i>${esc(d.name)}</div><div class="r">${esc(d.role)}${d.course==='校長'?'':'・'+d.course}</div></button>`).join('')}</div>
+ elMain.innerHTML=`<div class="grid">${p.map(d=>`<button class="cell" data-id="${d.id}">
+  <img src="${portrait(d)}" alt="" loading="lazy">
+  <div class="n"><i class="lv" data-l="${st(d.id).box}"></i>${esc(d.name)}</div>
+  <div class="r">${d.deck==='teacher'?esc(d.role)+(d.course==='校長'?'':'・'+d.course):esc(d.course)}</div></button>`).join('')}</div>
  <div class="foot"><span>● 定着度（黄→緑）</span><button id="reset">進捗をリセット</button></div>`;
- main.querySelectorAll('.cell').forEach(b=>b.onclick=()=>{const d=DATA.find(x=>x.id===b.dataset.id);document.getElementById('sheetIn').innerHTML=detail(d);document.getElementById('sheet').classList.add('on')});
+ elMain.querySelectorAll('.cell').forEach(b=>b.onclick=()=>{
+  const d=DATA.find(x=>x.id===b.dataset.id);
+  document.getElementById('sheetIn').innerHTML='<div class="grab"></div>'+detail(d);
+  document.getElementById('sheet').classList.add('on')});
  document.getElementById('reset').onclick=()=>{if(confirm('進捗を全部消しますか？')){S.prog={};save();renderList()}};
+ setBar('',false);elBar.classList.add('hide');
 }
+document.getElementById('sheet').onclick=e=>{if(e.target.id==='sheet')e.currentTarget.classList.remove('on')};
 render();
 </script>
 </body>
